@@ -27,11 +27,13 @@ func AccessTokenMiddleware() gin.HandlerFunc {
 		authtoken := c.Request.Header.Get("AuthToken")
 		if authtoken == "" {
 			c.JSON(200, util.BuildError(util.NOTLOGIN, util.ErrMap[util.NOTLOGIN]))
+			c.Abort()
 			return
 		} else {
 			userInfo, err := util.UserInfo(authtoken)
 			if err != nil || userInfo[util.IDKEY] <= 0 || userInfo[util.WHOKEY] <= 0 {
 				c.JSON(200, util.BuildError(util.NOTLOGIN, util.ErrMap[util.NOTLOGIN]))
+				c.Abort()
 				return
 			}
 			c.Set(util.IDKEY, userInfo[util.IDKEY])
