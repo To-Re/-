@@ -11,3 +11,9 @@ func BuildError(code int32, msg string) *error_info {
 		Msg:  msg,
 	}
 }
+
+const NOTLOGIN = -1
+
+var ErrMap = map[int32]string{
+	NOTLOGIN: "未登录",
+}
