@@ -9,21 +9,33 @@ import (
 )
 
 func main() {
-	method.Login()
 	router := gin.Default()
 
-	router.POST("/login", func(c *gin.Context) {
-		c.String(http.StatusOK, "It works")
-	})
+	// 注册
+	router.POST("/register", method.Register)
+	// 登录
+	router.POST("/login", method.Login)
+
 	api := router.Group("/api")
-	api.Use(method.AccessTokenMiddleware())
-	api.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "It works")
-	})
+	{
+		api.Use(method.AccessTokenMiddleware())
+
+		// api/teacher
+		teacher := api.Group("/teacher")
+		{
+			teacher.GET("/", func(c *gin.Context) {
+				c.String(http.StatusOK, "teacher")
+			})
+		}
+
+		// api/student
+		student := api.Group("/student")
+		{
+			student.GET("/", func(c *gin.Context) {
+				c.String(http.StatusOK, "student")
+			})
+		}
+	}
 
 	router.Run(":8080")
 }
-
-/*
-curl -H 'AuthToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk2MTgwMjUsImlhdCI6MTYxOTUzMTYyNSwidXNlcl9pZCI6MSwid2hvIjoxfQ.0oPXhRNGbYRia0216iMzz0saBJgEfPDIeh-CfF6OW4U' 127.0.0.1:8080/api/
-*/

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Login(c *gin.Context) {
+func Register(c *gin.Context) {
 	ret, _ := util.CreteToken(1, 1)
 	fmt.Println("token : " + ret)
 	tmp, _ := util.ParseToken(ret)
