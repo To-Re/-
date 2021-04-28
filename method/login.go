@@ -19,14 +19,16 @@ func Login(c *gin.Context) {
 		Msg:  "",
 	}
 	// 校验
-	ret, _ := util.CreteToken(int32(req.Number), int32(req.UserType))
+	// userId 从数据库拿到，通过number
+	userId := 123
+	ret, _ := util.CreteToken(int32(userId), int32(req.UserType))
 	fmt.Println("token : " + ret)
 	resp.Token = ret
 	c.JSON(200, resp)
 }
 
 type LoginRequest struct {
-	Number   int    `json:"number"`
+	Number   string `json:"number"`
 	Password string `json:"password"`
 	UserType int    `json:"user_type"`
 }
