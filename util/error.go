@@ -12,8 +12,12 @@ func BuildError(code int32, msg string) *error_info {
 	}
 }
 
+const OK = 0
 const NOTLOGIN = -1
+const PARAMERROR = -2
 
 var ErrMap = map[int32]string{
-	NOTLOGIN: "未登录",
+	OK:         "成功",
+	NOTLOGIN:   "未登录",
+	PARAMERROR: "参数错误",
 }
