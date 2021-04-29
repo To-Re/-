@@ -35,6 +35,9 @@ func Login(c *gin.Context) {
 			return
 		}
 		userId = student.ID
+	} else {
+		c.JSON(200, util.BuildError(util.LOGINERROR, util.ErrMap[util.LOGINERROR]+"：请检查人员类型"))
+		return
 	}
 	ret, err := util.CreteToken(int32(userId), int32(req.UserType))
 	if err != nil {
