@@ -21,3 +21,24 @@ func GetTeacherByUserId(uid int32) (*model.Teacher, error) {
 	}
 	return &teacher, nil
 }
+
+func GetTeacherListByIds(Ids []int32) ([]*model.Teacher, error) {
+	db := dal.db
+	teacherList := []*model.Teacher{}
+	if err := db.Table(dal.teacherTableName).Where("id in (?)", Ids).Find(&teacherList).Error; err != nil {
+		return nil, err
+	}
+	return teacherList, nil
+}
+
+func GetTeacherMapByIds(Ids []int32) (map[int32]*model.Teacher, error) {
+	list, err := GetTeacherListByIds(Ids)
+	if err != nil {
+		return nil, err
+	}
+	teacherMap := make(map[int32]*model.Teacher)
+	for _, v := range list {
+		teacherMap[int32(v.ID)] = v
+	}
+	return teacherMap, nil
+}

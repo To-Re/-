@@ -5,9 +5,11 @@ import (
 )
 
 type Dal struct {
-	db               *gorm.DB
-	teacherTableName string
-	studentTableName string
+	db                    *gorm.DB
+	teacherTableName      string
+	studentTableName      string
+	klassTableName        string
+	teacherKlassTableName string
 }
 
 var dal *Dal
@@ -15,9 +17,11 @@ var dal *Dal
 func NewDal(gormDb *gorm.DB) {
 	if dal == nil {
 		dal = &Dal{
-			db:               gormDb,
-			teacherTableName: "teacher",
-			studentTableName: "student",
+			db:                    gormDb,
+			teacherTableName:      "teacher",
+			studentTableName:      "student",
+			klassTableName:        "klass",
+			teacherKlassTableName: "teacher_klass",
 		}
 	}
 }
