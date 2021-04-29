@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bishe/backend/config"
 	"bishe/backend/method"
+	"fmt"
 
 	"net/http"
 
@@ -9,6 +11,10 @@ import (
 )
 
 func main() {
+	a := config.GetDbInfo()
+	fmt.Println(a)
+	fmt.Println("\n\n\n???")
+	/***************************/
 	router := gin.Default()
 	router.Use(Cors())
 
