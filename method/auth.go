@@ -49,10 +49,13 @@ func CheckTeacherAuth() gin.HandlerFunc {
 		userType, err := GetWho(c)
 		if err != nil {
 			c.JSON(200, util.BuildError(util.NOTLOGIN, err.Error()))
+			c.Abort()
 			return
 		}
 		if userType != util.UserTypeTeacher {
 			c.JSON(200, util.BuildError(util.NOTAUTH, util.ErrMap[util.NOTAUTH]+": 需要老师权限"))
+			c.Abort()
+			return
 		}
 		c.Next()
 	}
