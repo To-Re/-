@@ -226,15 +226,15 @@ var TeacherColumns = struct {
 	Password: "password",
 }
 
-// TeacherClass [...]
-type TeacherClass struct {
+// TeacherKlass [...]
+type TeacherKlass struct {
 	ID        int `gorm:"primaryKey;column:id;type:int(11);not null"`                                  // 自增主键
 	TeacherID int `gorm:"uniqueIndex:uni_teacher_id_klass_id;column:teacher_id;type:int(11);not null"` // 老师id
 	KlassID   int `gorm:"uniqueIndex:uni_teacher_id_klass_id;column:klass_id;type:int(11);not null"`   // 班级id
 }
 
-// TeacherClassColumns get sql column name.获取数据库列名
-var TeacherClassColumns = struct {
+// TeacherKlassColumns get sql column name.获取数据库列名
+var TeacherKlassColumns = struct {
 	ID        string
 	TeacherID string
 	KlassID   string

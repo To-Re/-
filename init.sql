@@ -69,8 +69,8 @@ CREATE TABLE `exam` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 ########## 老师-班级表 #############
-DROP TABLE IF EXISTS `teacher_class`;
-CREATE TABLE `teacher_class` (
+DROP TABLE IF EXISTS `teacher_klass`;
+CREATE TABLE `teacher_klass` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `teacher_id` INT NOT NULL COMMENT '老师id',
   `klass_id` INT NOT NULL COMMENT '班级id',
