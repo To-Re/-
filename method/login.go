@@ -9,7 +9,7 @@ import (
 
 func Login(c *gin.Context) {
 	var req LoginRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		c.JSON(200, util.BuildError(util.PARAMERROR, util.ErrMap[util.PARAMERROR]))
 		return

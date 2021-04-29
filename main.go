@@ -15,7 +15,12 @@ func main() {
 	// 注册
 	router.POST("/register", method.Register)
 	// 登录
-	router.POST("user/login", method.Login)
+	router.POST("/user/login", method.Login)
+	user := router.Group("/user")
+	{
+		user.Use(method.AccessTokenMiddleware())
+		user.GET("/info", method.UserInfo)
+	}
 
 	api := router.Group("/api")
 	{
