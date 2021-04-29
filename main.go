@@ -20,6 +20,7 @@ func main() {
 	{
 		user.Use(method.AccessTokenMiddleware())
 		user.GET("/info", method.UserInfo)
+		user.POST("/logout", method.Logout)
 	}
 
 	api := router.Group("/api")
