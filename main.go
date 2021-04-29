@@ -2,19 +2,32 @@ package main
 
 import (
 	"bishe/backend/config"
+	"bishe/backend/dal"
 	"bishe/backend/method"
 	"fmt"
 
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
-	a := config.GetDbInfo()
-	fmt.Println(a)
-	fmt.Println("\n\n\n???")
-	/***************************/
+	/* 配置 */
+	config := config.GetDbInfo()
+	/* 连数据库 */
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		config.Username, config.Password, config.Host, config.Port, config.Database,
+	)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("db init panic")
+	}
+	dal.NewDal(db)
+
+	/* 路由 */
 	router := gin.Default()
 	router.Use(Cors())
 
