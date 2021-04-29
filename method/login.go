@@ -1,6 +1,7 @@
 package method
 
 import (
+	"bishe/backend/dal"
 	"bishe/backend/util"
 	"fmt"
 
@@ -19,11 +20,30 @@ func Login(c *gin.Context) {
 		Msg:  "",
 	}
 	// 校验
-	// userId 从数据库拿到，通过number
-	userId := 123
-	ret, _ := util.CreteToken(int32(userId), int32(req.UserType))
-	fmt.Println("token : " + ret)
+	var userId int = 0
+	if req.UserType == util.UserTypeTeacher { // 老师
+		teacher, err := dal.GetTeacherByNumber(req.Number)
+		if err != nil || teacher == nil || teacher.ID <= 0 || req.Password != teacher.Password {
+			c.JSON(200, util.BuildError(util.LOGINERROR, util.ErrMap[util.LOGINERROR]+"：请检查账号或密码"))
+			return
+		}
+		userId = teacher.ID
+	} else if req.UserType == util.UserTypeStudent { // 学生
+		student, err := dal.GetStudentByNumber(req.Number)
+		if err != nil || student == nil || student.ID <= 0 || req.Password != student.Password {
+			c.JSON(200, util.BuildError(util.LOGINERROR, util.ErrMap[util.LOGINERROR]+"：请检查账号或密码"))
+			return
+		}
+		userId = student.ID
+	}
+	ret, err := util.CreteToken(int32(userId), int32(req.UserType))
+	if err != nil {
+		// 报警
+		c.JSON(200, util.BuildError(util.LOGINERROR, util.ErrMap[util.LOGINERROR]+"：出现带问题，请联系管理员"))
+		return
+	}
 	resp.Token = ret
+	fmt.Println("token : " + ret)
 	c.JSON(200, resp)
 }
 
