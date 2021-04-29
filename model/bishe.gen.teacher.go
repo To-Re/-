@@ -119,8 +119,8 @@ func (obj *_TeacherMgr) GetBatchFromName(names []string) (results []*Teacher, er
 }
 
 // GetFromNumber 通过number获取内容 工号
-func (obj *_TeacherMgr) GetFromNumber(number string) (results []*Teacher, err error) {
-	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`number` = ?", number).Find(&results).Error
+func (obj *_TeacherMgr) GetFromNumber(number string) (result Teacher, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`number` = ?", number).Find(&result).Error
 
 	return
 }
@@ -151,6 +151,13 @@ func (obj *_TeacherMgr) GetBatchFromPassword(passwords []string) (results []*Tea
 // FetchByPrimaryKey primay or index 获取唯一内容
 func (obj *_TeacherMgr) FetchByPrimaryKey(id int) (result Teacher, err error) {
 	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`id` = ?", id).Find(&result).Error
+
+	return
+}
+
+// FetchUniqueByNumber primay or index 获取唯一内容
+func (obj *_TeacherMgr) FetchUniqueByNumber(number string) (result Teacher, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`number` = ?", number).Find(&result).Error
 
 	return
 }
