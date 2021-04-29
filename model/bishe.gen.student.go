@@ -51,7 +51,7 @@ func (obj *_StudentMgr) WithName(name string) Option {
 }
 
 // WithNumber number获取 学号
-func (obj *_StudentMgr) WithNumber(number int) Option {
+func (obj *_StudentMgr) WithNumber(number string) Option {
 	return optionFunc(func(o *options) { o.query["number"] = number })
 }
 
@@ -124,14 +124,14 @@ func (obj *_StudentMgr) GetBatchFromName(names []string) (results []*Student, er
 }
 
 // GetFromNumber 通过number获取内容 学号
-func (obj *_StudentMgr) GetFromNumber(number int) (results []*Student, err error) {
+func (obj *_StudentMgr) GetFromNumber(number string) (results []*Student, err error) {
 	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`number` = ?", number).Find(&results).Error
 
 	return
 }
 
 // GetBatchFromNumber 批量查找 学号
-func (obj *_StudentMgr) GetBatchFromNumber(numbers []int) (results []*Student, err error) {
+func (obj *_StudentMgr) GetBatchFromNumber(numbers []string) (results []*Student, err error) {
 	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`number` IN (?)", numbers).Find(&results).Error
 
 	return

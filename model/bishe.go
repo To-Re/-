@@ -185,7 +185,7 @@ var RecordColumns = struct {
 type Student struct {
 	ID       int    `gorm:"primaryKey;column:id;type:int(11);not null"` // 自增主键
 	Name     string `gorm:"column:name;type:varchar(255);not null"`     // 名称
-	Number   int    `gorm:"column:number;type:int(11);not null"`        // 学号
+	Number   string `gorm:"column:number;type:varchar(255);not null"`   // 学号
 	Password string `gorm:"column:password;type:varchar(255);not null"` // 密码
 	KlassID  int    `gorm:"column:klass_id;type:int(11);not null"`      // 所属班级id
 }
@@ -209,7 +209,7 @@ var StudentColumns = struct {
 type Teacher struct {
 	ID       int    `gorm:"primaryKey;column:id;type:int(11);not null"` // 自增主键
 	Name     string `gorm:"column:name;type:varchar(255);not null"`     // 名称
-	Number   int    `gorm:"column:number;type:int(11);not null"`        // 工号
+	Number   string `gorm:"column:number;type:varchar(255);not null"`   // 工号
 	Password string `gorm:"column:password;type:varchar(255);not null"` // 密码
 }
 

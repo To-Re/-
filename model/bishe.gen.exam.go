@@ -3,9 +3,8 @@ package model
 import (
 	"context"
 	"fmt"
-	"time"
-
 	"gorm.io/gorm"
+	"time"
 )
 
 type _ExamMgr struct {

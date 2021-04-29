@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `name` varchar(255) NOT NULL COMMENT '名称',
-  `number` INT NOT NULL COMMENT '工号',
+  `number` varchar(255) NOT NULL COMMENT '工号',
   `password` varchar(255) NOT NULL COMMENT '密码',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `name` varchar(255) NOT NULL COMMENT '名称',
-  `number` INT NOT NULL COMMENT '学号',
+  `number` varchar(255) NOT NULL COMMENT '学号',
   `password` varchar(255) NOT NULL COMMENT '密码',
   `klass_id` INT NOT NULL COMMENT '所属班级id',
   PRIMARY KEY (`id`) USING BTREE
