@@ -16,6 +16,7 @@ const OK = 0
 const NOTLOGIN = -1
 const PARAMERROR = -2
 const NETWORKERROR = -3
+const NOTAUTH = -4
 const LOGINERROR = -100
 
 var ErrMap = map[int32]string{
@@ -24,4 +25,5 @@ var ErrMap = map[int32]string{
 	PARAMERROR:   "参数错误",
 	NETWORKERROR: "网络错误",
 	LOGINERROR:   "登录失败",
+	NOTAUTH:      "权限不足",
 }

@@ -42,3 +42,18 @@ func AccessTokenMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// 中间件
+func CheckTeacherAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userType, err := GetWho(c)
+		if err != nil {
+			c.JSON(200, util.BuildError(util.NOTLOGIN, err.Error()))
+			return
+		}
+		if userType != util.UserTypeTeacher {
+			c.JSON(200, util.BuildError(util.NOTAUTH, util.ErrMap[util.NOTAUTH]+": 需要老师权限"))
+		}
+		c.Next()
+	}
+}

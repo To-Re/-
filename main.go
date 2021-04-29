@@ -49,9 +49,14 @@ func main() {
 		// api/teacher
 		teacher := api.Group("/teacher")
 		{
-			teacher.GET("/", func(c *gin.Context) {
-				c.String(http.StatusOK, "teacher")
-			})
+			teacher.Use(method.CheckTeacherAuth())
+			klass := teacher.Group("/klass")
+			{
+				klass.GET("/list", method.KlassList)
+				klass.POST("/create", method.KlassCreate)
+				klass.POST("/update", method.KlassUpdate)
+			}
+
 		}
 
 		// api/student
