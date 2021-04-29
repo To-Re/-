@@ -17,9 +17,20 @@ func UserInfo(c *gin.Context) {
 		Code: 0,
 		Msg:  "",
 	}
-	resp.UserId = int32(c.GetInt(util.IDKEY))
-	resp.UserType = int32(c.GetInt(util.WHOKEY))
+	userId, err := GetId(c)
+	if err != nil {
+		c.JSON(200, util.BuildError(util.NOTLOGIN, err.Error()))
+		return
+	}
+	userType, err := GetWho(c)
+	if err != nil {
+		c.JSON(200, util.BuildError(util.NOTLOGIN, err.Error()))
+		return
+	}
 	// 从数据库拿到用户名称
+
+	resp.UserId = userId
+	resp.UserType = userType
 	resp.Name = "wzy"
 	c.JSON(200, resp)
 }
