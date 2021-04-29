@@ -15,7 +15,7 @@ func main() {
 	// 注册
 	router.POST("/register", method.Register)
 	// 登录
-	router.POST("/login", method.Login)
+	router.POST("user/login", method.Login)
 
 	api := router.Group("/api")
 	{
