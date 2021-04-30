@@ -42,3 +42,11 @@ func GetTeacherMapByIds(Ids []int32) (map[int32]*model.Teacher, error) {
 	}
 	return teacherMap, nil
 }
+
+func CreateTeacher(user *model.Teacher) error {
+	db := dal.db
+	if err := db.Table(dal.teacherTableName).Create(user).Error; err != nil {
+		return err
+	}
+	return nil
+}

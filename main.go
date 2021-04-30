@@ -32,7 +32,7 @@ func main() {
 	router.Use(Cors())
 
 	// 注册
-	router.POST("/register", method.Register)
+	router.POST("/user/register", method.Register)
 	// 登录
 	router.POST("/user/login", method.Login)
 	user := router.Group("/user")
