@@ -1,12 +1,12 @@
 package util
 
-type error_info struct {
+type ErrorInfo struct {
 	Code int32  `json:"code"`
 	Msg  string `json:"msg"`
 }
 
-func BuildError(code int32, msg string) *error_info {
-	return &error_info{
+func BuildError(code int32, msg string) *ErrorInfo {
+	return &ErrorInfo{
 		Code: code,
 		Msg:  msg,
 	}

@@ -21,3 +21,11 @@ func GetStudentByUserId(uid int32) (*model.Student, error) {
 	}
 	return &student, nil
 }
+
+func CreateStudent(user *model.Student) error {
+	db := dal.db
+	if err := db.Table(dal.studentTableName).Create(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
