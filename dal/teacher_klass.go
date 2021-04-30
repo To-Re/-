@@ -1,6 +1,10 @@
 package dal
 
-import "bishe/backend/model"
+import (
+	"bishe/backend/model"
+
+	"gorm.io/gorm"
+)
 
 func GetTeacherKlassListByKlassIds(klassIds []int32) ([]*model.TeacherKlass, error) {
 	db := dal.db
@@ -9,4 +13,11 @@ func GetTeacherKlassListByKlassIds(klassIds []int32) ([]*model.TeacherKlass, err
 		return nil, err
 	}
 	return teacherKlassList, nil
+}
+
+func CreateTeacherKlass(tx *gorm.DB, teacherKlass *model.TeacherKlass) error {
+	if err := tx.Table(dal.teacherKlassTableName).Create(teacherKlass).Error; err != nil {
+		return err
+	}
+	return nil
 }

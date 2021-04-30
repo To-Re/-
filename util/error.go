@@ -17,6 +17,7 @@ const NOTLOGIN = -1
 const PARAMERROR = -2
 const NETWORKERROR = -3
 const NOTAUTH = -4
+const FUNCFAILURE = -5
 const LOGINERROR = -100
 const REGISTERERROR = -101
 
@@ -28,4 +29,5 @@ var ErrMap = map[int32]string{
 	LOGINERROR:    "登录失败",
 	NOTAUTH:       "权限不足",
 	REGISTERERROR: "注册失败",
+	FUNCFAILURE:   "服务失败",
 }

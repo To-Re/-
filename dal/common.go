@@ -25,3 +25,7 @@ func NewDal(gormDb *gorm.DB) {
 		}
 	}
 }
+
+func GetDb() *gorm.DB {
+	return dal.db
+}

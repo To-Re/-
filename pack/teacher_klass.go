@@ -29,3 +29,34 @@ func GetTeacherModelMapbyKlassIds(klassIds []int32) (map[int32]*model.Teacher, e
 	}
 	return teacherMapKeyIsKlassId, nil
 }
+
+func CreateKlassAndBindTeacher(userId int32, klassName string) error {
+	// 开启事物
+	tx := dal.GetDb().Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	klass := &model.Klass{
+		Name: klassName,
+	}
+	if err := dal.CreateKlass(tx, klass); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := dal.CreateTeacherKlass(tx, &model.TeacherKlass{
+		TeacherID: int(userId),
+		KlassID:   klass.ID,
+	}); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
+}

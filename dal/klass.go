@@ -2,6 +2,8 @@ package dal
 
 import (
 	"bishe/backend/model"
+
+	"gorm.io/gorm"
 )
 
 func GetKlassList() ([]*model.Klass, error) {
@@ -11,4 +13,11 @@ func GetKlassList() ([]*model.Klass, error) {
 		return nil, err
 	}
 	return klassList, nil
+}
+
+func CreateKlass(tx *gorm.DB, klass *model.Klass) error {
+	if err := tx.Table(dal.klassTableName).Create(klass).Error; err != nil {
+		return err
+	}
+	return nil
 }
