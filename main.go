@@ -64,6 +64,7 @@ func main() {
 			{
 				question.GET("/list", questionMethod.QuestionList)
 				question.POST("/create", questionMethod.QuestionCreate)
+				question.GET("/detail", questionMethod.QuestionDetail)
 			}
 		}
 

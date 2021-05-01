@@ -147,5 +147,5 @@ INSERT INTO student(name,number,password,klass_id) VALUES('学生2','2','2',1);
 INSERT INTO student(name,number,password,klass_id) VALUES('学生3','3','3',2);
 INSERT INTO student(name,number,password,klass_id) VALUES('学生4','4','4',3);
 INSERT INTO student(name,number,password,klass_id) VALUES('学生5','5','5',4);
-INSERT INTO question(`desc`,answer,type,option_desc_A,option_desc_B,option_desc_C,option_desc_D) VALUES('这是单选题题目描述','{"A"}',1,'答案A','B','C','D');
-INSERT INTO question(`desc`,answer,type,option_desc_A,option_desc_B,option_desc_C,option_desc_D) VALUES('这是多选题题目描述','{"A,B"}',2,'答案A','答案B','C','D');
+INSERT INTO question(`desc`,answer,type,option_desc_A,option_desc_B,option_desc_C,option_desc_D) VALUES('这是单选题题目描述','A',1,'答案A','B','C','D');
+INSERT INTO question(`desc`,answer,type,option_desc_A,option_desc_B,option_desc_C,option_desc_D) VALUES('这是多选题题目描述','A;B',2,'答案A','答案B','C','D');
