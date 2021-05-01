@@ -1,6 +1,8 @@
 package dal
 
-import "bishe/backend/model"
+import (
+	"bishe/backend/model"
+)
 
 func GetQuestionList() ([]*model.Question, error) {
 	db := dal.db
@@ -9,4 +11,12 @@ func GetQuestionList() ([]*model.Question, error) {
 		return nil, err
 	}
 	return list, nil
+}
+
+func CreateQuestion(question *model.Question) error {
+	db := dal.db
+	if err := db.Table(dal.questionTableName).Create(question).Error; err != nil {
+		return err
+	}
+	return nil
 }

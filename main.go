@@ -63,6 +63,7 @@ func main() {
 			question := teacher.Group("question")
 			{
 				question.GET("/list", questionMethod.QuestionList)
+				question.POST("/create", questionMethod.QuestionCreate)
 			}
 		}
 
