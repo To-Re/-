@@ -1,4 +1,4 @@
-package method
+package user
 
 import (
 	"bishe/backend/dal"
@@ -18,12 +18,12 @@ func UserInfo(c *gin.Context) {
 		Code: 0,
 		Msg:  "",
 	}
-	userId, err := GetId(c)
+	userId, err := util.GetId(c)
 	if err != nil {
 		c.JSON(200, util.BuildError(util.NOTLOGIN, err.Error()))
 		return
 	}
-	userType, err := GetWho(c)
+	userType, err := util.GetWho(c)
 	if err != nil {
 		c.JSON(200, util.BuildError(util.NOTLOGIN, err.Error()))
 		return

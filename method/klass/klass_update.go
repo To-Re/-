@@ -1,4 +1,4 @@
-package method
+package klass
 
 import (
 	"bishe/backend/dal"

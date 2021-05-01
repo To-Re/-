@@ -1,4 +1,4 @@
-package method
+package klass
 
 import (
 	"bishe/backend/pack"
@@ -23,7 +23,7 @@ func KlassCreate(c *gin.Context) {
 		c.JSON(200, util.BuildError(util.PARAMERROR, util.ErrMap[util.PARAMERROR]+": "+err.Error()))
 		return
 	}
-	userId, err := GetId(c)
+	userId, err := util.GetId(c)
 	if err != nil {
 		c.JSON(200, util.BuildError(util.NOTLOGIN, util.ErrMap[util.PARAMERROR]))
 	}

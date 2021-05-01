@@ -1,4 +1,4 @@
-package method
+package user
 
 import (
 	"bishe/backend/dal"

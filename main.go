@@ -3,8 +3,10 @@ package main
 import (
 	"bishe/backend/config"
 	"bishe/backend/dal"
-	"bishe/backend/method"
+	klassMethod "bishe/backend/method/klass"
 	questionMethod "bishe/backend/method/question"
+	userMethod "bishe/backend/method/user"
+	"bishe/backend/util"
 	"fmt"
 
 	"net/http"
@@ -33,30 +35,30 @@ func main() {
 	router.Use(Cors())
 
 	// 注册
-	router.POST("/user/register", method.Register)
+	router.POST("/user/register", userMethod.Register)
 	// 登录
-	router.POST("/user/login", method.Login)
+	router.POST("/user/login", userMethod.Login)
 	user := router.Group("/user")
 	{
-		user.Use(method.AccessTokenMiddleware())
-		user.GET("/info", method.UserInfo)
-		user.POST("/logout", method.Logout)
+		user.Use(util.AccessTokenMiddleware())
+		user.GET("/info", userMethod.UserInfo)
+		user.POST("/logout", userMethod.Logout)
 	}
 
 	api := router.Group("/api")
 	{
-		api.Use(method.AccessTokenMiddleware())
+		api.Use(util.AccessTokenMiddleware())
 
 		// api/teacher
 		teacher := api.Group("/teacher")
 		{
-			teacher.Use(method.CheckTeacherAuth())
+			teacher.Use(util.CheckTeacherAuth())
 			klass := teacher.Group("/klass")
 			{
-				klass.GET("/list", method.KlassList)
-				klass.POST("/create", method.KlassCreate)
-				klass.POST("/update", method.KlassUpdate)
-				klass.GET("/detail", method.KlassDetail)
+				klass.GET("/list", klassMethod.KlassList)
+				klass.POST("/create", klassMethod.KlassCreate)
+				klass.POST("/update", klassMethod.KlassUpdate)
+				klass.GET("/detail", klassMethod.KlassDetail)
 			}
 			question := teacher.Group("question")
 			{
