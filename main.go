@@ -55,6 +55,7 @@ func main() {
 				klass.GET("/list", method.KlassList)
 				klass.POST("/create", method.KlassCreate)
 				klass.POST("/update", method.KlassUpdate)
+				klass.GET("/detail", method.KlassDetail)
 			}
 
 		}
