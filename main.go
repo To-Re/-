@@ -4,6 +4,7 @@ import (
 	"bishe/backend/config"
 	"bishe/backend/dal"
 	"bishe/backend/method"
+	questionMethod "bishe/backend/method/question"
 	"fmt"
 
 	"net/http"
@@ -57,7 +58,10 @@ func main() {
 				klass.POST("/update", method.KlassUpdate)
 				klass.GET("/detail", method.KlassDetail)
 			}
-
+			question := teacher.Group("question")
+			{
+				question.GET("/list", questionMethod.QuestionList)
+			}
 		}
 
 		// api/student
