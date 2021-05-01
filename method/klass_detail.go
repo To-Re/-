@@ -3,7 +3,6 @@ package method
 import (
 	"bishe/backend/dal"
 	"bishe/backend/util"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,8 +30,6 @@ func KlassDetail(c *gin.Context) {
 	}
 
 	resp.KlassName = klassInfo.Name
-	fmt.Println(req.KlassId)
-	fmt.Println(klassInfo)
 	c.JSON(200, resp)
 }
 

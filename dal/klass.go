@@ -30,3 +30,13 @@ func GetKlassById(klass_id int32) (*model.Klass, error) {
 	}
 	return klass, nil
 }
+
+func UpdateKlass(klass *model.Klass) error {
+	db := dal.db
+	if err := db.Table(dal.klassTableName).
+		Where("id = ?", klass.ID).
+		Updates(klass).Error; err != nil {
+		return err
+	}
+	return nil
+}
