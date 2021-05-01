@@ -102,20 +102,23 @@ var PaperColumns = struct {
 
 // PaperQuestion [...]
 type PaperQuestion struct {
-	ID         int `gorm:"primaryKey;column:id;type:int(11);not null"`                                    // 自增主键
-	PaperID    int `gorm:"uniqueIndex:uni_paper_id_question_id;column:paper_id;type:int(11);not null"`    // 考卷id
-	QuestionID int `gorm:"uniqueIndex:uni_paper_id_question_id;column:question_id;type:int(11);not null"` // 题目id
+	ID            int `gorm:"primaryKey;column:id;type:int(11);not null"`                                    // 自增主键
+	PaperID       int `gorm:"uniqueIndex:uni_paper_id_question_id;column:paper_id;type:int(11);not null"`    // 考卷id
+	QuestionID    int `gorm:"uniqueIndex:uni_paper_id_question_id;column:question_id;type:int(11);not null"` // 题目id
+	QuestionScore int `gorm:"column:question_score;type:int(11);not null"`                                   // 题目得分
 }
 
 // PaperQuestionColumns get sql column name.获取数据库列名
 var PaperQuestionColumns = struct {
-	ID         string
-	PaperID    string
-	QuestionID string
+	ID            string
+	PaperID       string
+	QuestionID    string
+	QuestionScore string
 }{
-	ID:         "id",
-	PaperID:    "paper_id",
-	QuestionID: "question_id",
+	ID:            "id",
+	PaperID:       "paper_id",
+	QuestionID:    "question_id",
+	QuestionScore: "question_score",
 }
 
 // Question [...]

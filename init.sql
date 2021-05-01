@@ -97,6 +97,7 @@ CREATE TABLE `paper_question` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `paper_id` INT NOT NULL COMMENT '考卷id',
   `question_id` INT NOT NULL COMMENT '题目id',
+  `question_score` INT NOT NULL COMMENT '题目得分',
 
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `uni_paper_id_question_id`(`paper_id`, `question_id`)
@@ -129,3 +130,22 @@ CREATE TABLE `record` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `uni_key`(`student_id`, `exam_id`, `paper_id`, `question_id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+##### 初始化数据
+INSERT INTO teacher(name,number,password) VALUES('老师1','1','1');
+INSERT INTO teacher(name,number,password) VALUES('老师2','2','2');
+INSERT INTO klass(name) VALUES('班级1');
+INSERT INTO klass(name) VALUES('班级2');
+INSERT INTO klass(name) VALUES('班级3');
+INSERT INTO klass(name) VALUES('班级4');
+INSERT INTO teacher_klass(teacher_id,klass_id) VALUES(1,1);
+INSERT INTO teacher_klass(teacher_id,klass_id) VALUES(1,2);
+INSERT INTO teacher_klass(teacher_id,klass_id) VALUES(2,3);
+INSERT INTO teacher_klass(teacher_id,klass_id) VALUES(2,4);
+INSERT INTO student(name,number,password,klass_id) VALUES('学生1','1','1',1);
+INSERT INTO student(name,number,password,klass_id) VALUES('学生2','2','2',1);
+INSERT INTO student(name,number,password,klass_id) VALUES('学生3','3','3',2);
+INSERT INTO student(name,number,password,klass_id) VALUES('学生4','4','4',3);
+INSERT INTO student(name,number,password,klass_id) VALUES('学生5','5','5',4);
+INSERT INTO question(`desc`,answer,type,option_desc_A,option_desc_B,option_desc_C,option_desc_D) VALUES('这是单选题题目描述','{"A"}',1,'答案A','B','C','D');
+INSERT INTO question(`desc`,answer,type,option_desc_A,option_desc_B,option_desc_C,option_desc_D) VALUES('这是多选题题目描述','{"A,B"}',2,'答案A','答案B','C','D');

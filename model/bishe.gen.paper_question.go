@@ -55,6 +55,11 @@ func (obj *_PaperQuestionMgr) WithQuestionID(questionID int) Option {
 	return optionFunc(func(o *options) { o.query["question_id"] = questionID })
 }
 
+// WithQuestionScore question_score获取 题目得分
+func (obj *_PaperQuestionMgr) WithQuestionScore(questionScore int) Option {
+	return optionFunc(func(o *options) { o.query["question_score"] = questionScore })
+}
+
 // GetByOption 功能选项模式获取
 func (obj *_PaperQuestionMgr) GetByOption(opts ...Option) (result PaperQuestion, err error) {
 	options := options{
@@ -123,6 +128,20 @@ func (obj *_PaperQuestionMgr) GetFromQuestionID(questionID int) (results []*Pape
 // GetBatchFromQuestionID 批量查找 题目id
 func (obj *_PaperQuestionMgr) GetBatchFromQuestionID(questionIDs []int) (results []*PaperQuestion, err error) {
 	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`question_id` IN (?)", questionIDs).Find(&results).Error
+
+	return
+}
+
+// GetFromQuestionScore 通过question_score获取内容 题目得分
+func (obj *_PaperQuestionMgr) GetFromQuestionScore(questionScore int) (results []*PaperQuestion, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`question_score` = ?", questionScore).Find(&results).Error
+
+	return
+}
+
+// GetBatchFromQuestionScore 批量查找 题目得分
+func (obj *_PaperQuestionMgr) GetBatchFromQuestionScore(questionScores []int) (results []*PaperQuestion, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`question_score` IN (?)", questionScores).Find(&results).Error
 
 	return
 }
