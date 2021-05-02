@@ -75,6 +75,8 @@ func main() {
 				paper.GET("/detail", paperMethod.PaperDetail)
 				paper.POST("/update", paperMethod.PaperUpdate)
 				paper.GET("/question/list", paperMethod.PaperQuestionList)
+				paper.POST("/question/bind", paperMethod.PaperQuestionBind)
+				paper.POST("/question/delete", paperMethod.PaperQuestionDelete)
 			}
 		}
 
