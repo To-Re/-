@@ -18,3 +18,12 @@ func CreatePaper(paper *model.Paper) error {
 	}
 	return nil
 }
+
+func GetPaperById(paper_id int32) (*model.Paper, error) {
+	db := dal.db
+	paper := &model.Paper{}
+	if err := db.Table(dal.paperTableName).Where("id = ?", paper_id).Find(&paper).Error; err != nil {
+		return nil, err
+	}
+	return paper, nil
+}
