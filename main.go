@@ -4,6 +4,7 @@ import (
 	"bishe/backend/config"
 	"bishe/backend/dal"
 	klassMethod "bishe/backend/method/klass"
+	paperMethod "bishe/backend/method/paper"
 	questionMethod "bishe/backend/method/question"
 	userMethod "bishe/backend/method/user"
 	"bishe/backend/util"
@@ -66,6 +67,10 @@ func main() {
 				question.POST("/create", questionMethod.QuestionCreate)
 				question.GET("/detail", questionMethod.QuestionDetail)
 				question.POST("/update", questionMethod.QuestionUpdate)
+			}
+			paper := teacher.Group("paper")
+			{
+				paper.GET("/list", paperMethod.PaperList)
 			}
 		}
 
