@@ -74,6 +74,7 @@ func main() {
 				paper.POST("/create", paperMethod.PaperCreate)
 				paper.GET("/detail", paperMethod.PaperDetail)
 				paper.POST("/update", paperMethod.PaperUpdate)
+				paper.GET("/question/list", paperMethod.PaperQuestionList)
 			}
 		}
 

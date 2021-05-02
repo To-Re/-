@@ -39,3 +39,12 @@ func UpdateQuestion(question *model.Question) error {
 	}
 	return nil
 }
+
+func GetQuestionListByIds(ids []int32) ([]*model.Question, error) {
+	db := dal.db
+	list := []*model.Question{}
+	if err := db.Table(dal.questionTableName).Where("id in (?)", ids).Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return list, nil
+}
