@@ -71,6 +71,7 @@ func main() {
 			paper := teacher.Group("paper")
 			{
 				paper.GET("/list", paperMethod.PaperList)
+				paper.POST("/create", paperMethod.PaperCreate)
 			}
 		}
 

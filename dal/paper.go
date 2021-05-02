@@ -10,3 +10,11 @@ func GetPaperList() ([]*model.Paper, error) {
 	}
 	return list, nil
 }
+
+func CreatePaper(paper *model.Paper) error {
+	db := dal.db
+	if err := db.Table(dal.paperTableName).Create(paper).Error; err != nil {
+		return err
+	}
+	return nil
+}
