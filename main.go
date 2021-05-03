@@ -3,6 +3,7 @@ package main
 import (
 	"bishe/backend/config"
 	"bishe/backend/dal"
+	examMethod "bishe/backend/method/exam"
 	klassMethod "bishe/backend/method/klass"
 	paperMethod "bishe/backend/method/paper"
 	questionMethod "bishe/backend/method/question"
@@ -77,6 +78,10 @@ func main() {
 				paper.GET("/question/list", paperMethod.PaperQuestionList)
 				paper.POST("/question/bind", paperMethod.PaperQuestionBind)
 				paper.POST("/question/delete", paperMethod.PaperQuestionDelete)
+			}
+			exam := teacher.Group("exam")
+			{
+				exam.GET("/list", examMethod.ExamList)
 			}
 		}
 
