@@ -1,6 +1,8 @@
 package paper
 
 import (
+	"bishe/backend/model"
+	"bishe/backend/pack"
 	"bishe/backend/util"
 	"fmt"
 
@@ -24,6 +26,14 @@ func PaperQuestionDelete(c *gin.Context) {
 	}
 
 	// 删除
+	err = pack.PaperQuestionDelete(&model.PaperQuestion{
+		PaperID:    int(req.PaperId),
+		QuestionID: int(req.QuestionId),
+	})
+	if err != nil {
+		c.JSON(200, util.BuildError(util.FUNCFAILURE, "删除失败："+err.Error()))
+		return
+	}
 
 	c.JSON(200, resp)
 }

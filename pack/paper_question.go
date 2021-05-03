@@ -63,7 +63,7 @@ func PaperQuestionBind(req *model.PaperQuestion) error {
 		return err
 	}
 	// 1.验证试卷题目绑定关系
-	_, err := dal.GetPaperQuestionListByPaperIdQuestionId(int32(req.PaperID), int32(req.QuestionID))
+	_, err := dal.GetPaperQuestionByPaperIdQuestionId(int32(req.PaperID), int32(req.QuestionID))
 	if err != nil && err != gorm.ErrRecordNotFound {
 		tx.Rollback()
 		return err
@@ -92,6 +92,45 @@ func PaperQuestionBind(req *model.PaperQuestion) error {
 	}
 	// 5.创建试卷题目绑定关系
 	err = dal.CreatePaperQuestion(tx, req)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
+
+func PaperQuestionDelete(req *model.PaperQuestion) error {
+	// 开启事务
+	tx := dal.GetDb().Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
+	// 1.查询考卷信息
+	paperInfo, err := dal.GetPaperById(int32(req.PaperID))
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	// 2.查询该条考卷-题目信息
+	paperQuestionInfo, err := dal.GetPaperQuestionByPaperIdQuestionId(int32(req.PaperID), int32(req.QuestionID))
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	// 3.更新考卷得分
+	paperInfo.ScoreLimit -= paperQuestionInfo.QuestionScore
+	err = dal.UpdatePaperScore(tx, paperInfo)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	// 4.删除关系
+	err = dal.DeletePaperQuestionByPaperIdQuestionId(tx, paperQuestionInfo)
 	if err != nil {
 		tx.Rollback()
 		return err

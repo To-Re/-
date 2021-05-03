@@ -15,7 +15,7 @@ func GetPaperQuestionListByPaperId(paperId int32) ([]*model.PaperQuestion, error
 	return list, nil
 }
 
-func GetPaperQuestionListByPaperIdQuestionId(paperId, questionId int32) (*model.PaperQuestion, error) {
+func GetPaperQuestionByPaperIdQuestionId(paperId, questionId int32) (*model.PaperQuestion, error) {
 	db := dal.db
 	res := model.PaperQuestion{}
 	if err := db.Table(dal.paperQuestionTableName).
@@ -29,6 +29,15 @@ func GetPaperQuestionListByPaperIdQuestionId(paperId, questionId int32) (*model.
 
 func CreatePaperQuestion(tx *gorm.DB, paperQuestion *model.PaperQuestion) error {
 	if err := tx.Table(dal.paperQuestionTableName).Create(paperQuestion).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeletePaperQuestionByPaperIdQuestionId(tx *gorm.DB, paperQuestion *model.PaperQuestion) error {
+	if err := tx.Table(dal.paperQuestionTableName).
+		Delete(paperQuestion).
+		Error; err != nil {
 		return err
 	}
 	return nil
