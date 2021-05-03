@@ -83,6 +83,7 @@ func main() {
 			{
 				exam.GET("/list", examMethod.ExamList)
 				exam.POST("/create", examMethod.ExamCreate)
+				exam.GET("/detail", examMethod.ExamDetail)
 			}
 		}
 

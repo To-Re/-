@@ -18,3 +18,12 @@ func CreateExam(exam *model.Exam) error {
 	}
 	return nil
 }
+
+func GetExamById(exam_id int32) (*model.Exam, error) {
+	db := dal.db
+	exam := &model.Exam{}
+	if err := db.Table(dal.examTableName).Where("id = ?", exam_id).First(&exam).Error; err != nil {
+		return nil, err
+	}
+	return exam, nil
+}
