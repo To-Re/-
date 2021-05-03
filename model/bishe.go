@@ -8,8 +8,8 @@ import (
 type Exam struct {
 	ID        int       `gorm:"primaryKey;column:id;type:int(11);not null"`                          // 自增主键
 	Name      string    `gorm:"column:name;type:varchar(255);not null"`                              // 考试名称
-	BeginTime time.Time `gorm:"column:begin_time;type:timestamp;not null;default:CURRENT_TIMESTAMP"` // 考试开始时间
-	Length    int       `gorm:"column:length;type:int(11);not null"`                                 // 考试时长
+	BeginTime time.Time `gorm:"column:begin_time;type:timestamp;not null;default:CURRENT_TIMESTAMP"` // 考试结束时间
+	EndTime   time.Time `gorm:"column:end_time;type:timestamp;not null;default:CURRENT_TIMESTAMP"`   // 考试结束时间
 	PaperID   int       `gorm:"column:paper_id;type:int(11);not null"`                               // 考卷id
 }
 
@@ -18,13 +18,13 @@ var ExamColumns = struct {
 	ID        string
 	Name      string
 	BeginTime string
-	Length    string
+	EndTime   string
 	PaperID   string
 }{
 	ID:        "id",
 	Name:      "name",
 	BeginTime: "begin_time",
-	Length:    "length",
+	EndTime:   "end_time",
 	PaperID:   "paper_id",
 }
 

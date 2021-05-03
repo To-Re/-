@@ -51,14 +51,14 @@ func (obj *_ExamMgr) WithName(name string) Option {
 	return optionFunc(func(o *options) { o.query["name"] = name })
 }
 
-// WithBeginTime begin_time获取 考试开始时间
+// WithBeginTime begin_time获取 考试结束时间
 func (obj *_ExamMgr) WithBeginTime(beginTime time.Time) Option {
 	return optionFunc(func(o *options) { o.query["begin_time"] = beginTime })
 }
 
-// WithLength length获取 考试时长
-func (obj *_ExamMgr) WithLength(length int) Option {
-	return optionFunc(func(o *options) { o.query["length"] = length })
+// WithEndTime end_time获取 考试结束时间
+func (obj *_ExamMgr) WithEndTime(endTime time.Time) Option {
+	return optionFunc(func(o *options) { o.query["end_time"] = endTime })
 }
 
 // WithPaperID paper_id获取 考卷id
@@ -124,30 +124,30 @@ func (obj *_ExamMgr) GetBatchFromName(names []string) (results []*Exam, err erro
 	return
 }
 
-// GetFromBeginTime 通过begin_time获取内容 考试开始时间
+// GetFromBeginTime 通过begin_time获取内容 考试结束时间
 func (obj *_ExamMgr) GetFromBeginTime(beginTime time.Time) (results []*Exam, err error) {
 	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`begin_time` = ?", beginTime).Find(&results).Error
 
 	return
 }
 
-// GetBatchFromBeginTime 批量查找 考试开始时间
+// GetBatchFromBeginTime 批量查找 考试结束时间
 func (obj *_ExamMgr) GetBatchFromBeginTime(beginTimes []time.Time) (results []*Exam, err error) {
 	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`begin_time` IN (?)", beginTimes).Find(&results).Error
 
 	return
 }
 
-// GetFromLength 通过length获取内容 考试时长
-func (obj *_ExamMgr) GetFromLength(length int) (results []*Exam, err error) {
-	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`length` = ?", length).Find(&results).Error
+// GetFromEndTime 通过end_time获取内容 考试结束时间
+func (obj *_ExamMgr) GetFromEndTime(endTime time.Time) (results []*Exam, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`end_time` = ?", endTime).Find(&results).Error
 
 	return
 }
 
-// GetBatchFromLength 批量查找 考试时长
-func (obj *_ExamMgr) GetBatchFromLength(lengths []int) (results []*Exam, err error) {
-	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`length` IN (?)", lengths).Find(&results).Error
+// GetBatchFromEndTime 批量查找 考试结束时间
+func (obj *_ExamMgr) GetBatchFromEndTime(endTimes []time.Time) (results []*Exam, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("`end_time` IN (?)", endTimes).Find(&results).Error
 
 	return
 }
