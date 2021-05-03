@@ -25,7 +25,7 @@ func PaperUpdate(c *gin.Context) {
 		return
 	}
 
-	if err := dal.UpdatePaper(&model.Paper{
+	if err := dal.UpdatePaperName(&model.Paper{
 		ID:   int(req.PaperId),
 		Name: req.PaperName,
 	}); err != nil {

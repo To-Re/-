@@ -1,6 +1,10 @@
 package dal
 
-import "bishe/backend/model"
+import (
+	"bishe/backend/model"
+
+	"gorm.io/gorm"
+)
 
 func GetPaperList() ([]*model.Paper, error) {
 	db := dal.db
@@ -28,11 +32,21 @@ func GetPaperById(paper_id int32) (*model.Paper, error) {
 	return paper, nil
 }
 
-func UpdatePaper(paper *model.Paper) error {
+func UpdatePaperName(paper *model.Paper) error {
 	db := dal.db
 	if err := db.Table(dal.paperTableName).
 		Where("id = ?", paper.ID).
 		Select("name").
+		Updates(paper).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdatePaperScore(tx *gorm.DB, paper *model.Paper) error {
+	if err := tx.Table(dal.paperTableName).
+		Where("id = ?", paper.ID).
+		Select("score_limit").
 		Updates(paper).Error; err != nil {
 		return err
 	}

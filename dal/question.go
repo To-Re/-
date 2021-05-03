@@ -24,7 +24,7 @@ func CreateQuestion(question *model.Question) error {
 func GetQuestionById(question_id int32) (*model.Question, error) {
 	db := dal.db
 	question := &model.Question{}
-	if err := db.Table(dal.questionTableName).Where("id = ?", question_id).Find(&question).Error; err != nil {
+	if err := db.Table(dal.questionTableName).Where("id = ?", question_id).First(&question).Error; err != nil {
 		return nil, err
 	}
 	return question, nil

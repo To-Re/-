@@ -4,6 +4,9 @@ import (
 	"bishe/backend/dal"
 	"bishe/backend/model"
 	"bishe/backend/util"
+	"fmt"
+
+	"gorm.io/gorm"
 )
 
 func GetPaperQuestionList(paperId int32) ([]*PaperQuestion, error) {
@@ -46,4 +49,52 @@ type PaperQuestion struct {
 	QuestionScore int32
 	QuestionDesc  string
 	QuestionType  string
+}
+
+func PaperQuestionBind(req *model.PaperQuestion) error {
+	// 开启事务
+	tx := dal.GetDb().Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
+	// 1.验证试卷题目绑定关系
+	_, err := dal.GetPaperQuestionListByPaperIdQuestionId(int32(req.PaperID), int32(req.QuestionID))
+	if err != nil && err != gorm.ErrRecordNotFound {
+		tx.Rollback()
+		return err
+	}
+	// 2.拿到 paper 表中试卷分数
+	paperInfo, err := dal.GetPaperById(int32(req.PaperID))
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	// 3.检查是否有该题目
+	_, err = dal.GetQuestionById(int32(req.QuestionID))
+	if err != nil {
+		tx.Rollback()
+		if err == gorm.ErrRecordNotFound {
+			return fmt.Errorf("题目id 不存在")
+		}
+		return err
+	}
+	// 4.修改 paper 表中试卷分数
+	paperInfo.ScoreLimit += req.QuestionScore
+	err = dal.UpdatePaperScore(tx, paperInfo)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	// 5.创建试卷题目绑定关系
+	err = dal.CreatePaperQuestion(tx, req)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
 }

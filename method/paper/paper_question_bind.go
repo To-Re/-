@@ -1,6 +1,8 @@
 package paper
 
 import (
+	"bishe/backend/model"
+	"bishe/backend/pack"
 	"bishe/backend/util"
 	"fmt"
 
@@ -20,6 +22,16 @@ func PaperQuestionBind(c *gin.Context) {
 	}
 	if err := ValidatePaperQuestionBindRequest(&req); err != nil {
 		c.JSON(200, util.BuildError(util.PARAMERROR, util.ErrMap[util.PARAMERROR]+": "+err.Error()))
+		return
+	}
+
+	err = pack.PaperQuestionBind(&model.PaperQuestion{
+		PaperID:       int(req.PaperId),
+		QuestionID:    int(req.QuestionId),
+		QuestionScore: int(req.QuestionScore),
+	})
+	if err != nil {
+		c.JSON(200, util.BuildError(util.FUNCFAILURE, "创建失败："+err.Error()))
 		return
 	}
 
