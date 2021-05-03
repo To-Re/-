@@ -1,4 +1,4 @@
-package Exam
+package exam
 
 import (
 	"bishe/backend/dal"

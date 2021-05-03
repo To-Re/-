@@ -10,3 +10,11 @@ func GetExamList() ([]*model.Exam, error) {
 	}
 	return list, nil
 }
+
+func CreateExam(exam *model.Exam) error {
+	db := dal.db
+	if err := db.Table(dal.examTableName).Create(exam).Error; err != nil {
+		return err
+	}
+	return nil
+}

@@ -82,6 +82,7 @@ func main() {
 			exam := teacher.Group("exam")
 			{
 				exam.GET("/list", examMethod.ExamList)
+				exam.POST("/create", examMethod.ExamCreate)
 			}
 		}
 
