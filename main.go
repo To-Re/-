@@ -84,6 +84,7 @@ func main() {
 				exam.GET("/list", examMethod.ExamList)
 				exam.POST("/create", examMethod.ExamCreate)
 				exam.GET("/detail", examMethod.ExamDetail)
+				exam.POST("/update", examMethod.ExamUpdate)
 				exam.GET("/klass/list", examMethod.ExamKlassList)
 				exam.POST("/klass/bind", examMethod.ExamKlassBind)
 				exam.POST("/klass/delete", examMethod.ExamKlassDelete)

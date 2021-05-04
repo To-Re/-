@@ -27,3 +27,13 @@ func GetExamById(exam_id int32) (*model.Exam, error) {
 	}
 	return exam, nil
 }
+
+func UpdateExam(exam *model.Exam) error {
+	db := dal.db
+	if err := db.Table(dal.examTableName).
+		Where("id = ?", exam.ID).
+		Updates(exam).Error; err != nil {
+		return err
+	}
+	return nil
+}
