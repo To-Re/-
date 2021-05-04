@@ -20,3 +20,15 @@ func CreateKlassExam(klassExam *model.KlassExam) error {
 	}
 	return nil
 }
+
+func DeleteKlassExam(klassExam *model.KlassExam) error {
+	db := dal.db
+	if err := db.Table(dal.klassExamTableName).
+		Where("klass_id = ?", klassExam.KlassID).
+		Where("exam_id = ?", klassExam.ExamID).
+		Delete(klassExam).
+		Error; err != nil {
+		return err
+	}
+	return nil
+}
