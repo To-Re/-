@@ -7,6 +7,7 @@ import (
 	klassMethod "bishe/backend/method/klass"
 	paperMethod "bishe/backend/method/paper"
 	questionMethod "bishe/backend/method/question"
+	studentMethod "bishe/backend/method/student"
 	userMethod "bishe/backend/method/user"
 	"bishe/backend/util"
 	"fmt"
@@ -95,9 +96,9 @@ func main() {
 		student := api.Group("/student")
 		{
 			student.Use(util.CheckStudentAuth())
-			student.GET("/", func(c *gin.Context) {
-				c.String(http.StatusOK, "student")
-			})
+			{
+				student.GET("/info", studentMethod.StudentInfo)
+			}
 		}
 	}
 
