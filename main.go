@@ -94,6 +94,7 @@ func main() {
 		// api/student
 		student := api.Group("/student")
 		{
+			student.Use(util.CheckStudentAuth())
 			student.GET("/", func(c *gin.Context) {
 				c.String(http.StatusOK, "student")
 			})
