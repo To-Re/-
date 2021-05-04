@@ -98,6 +98,7 @@ func main() {
 			student.Use(util.CheckStudentAuth())
 			{
 				student.GET("/info", studentMethod.StudentInfo)
+				student.POST("/info/update", studentMethod.StudentInfoUpdate)
 			}
 		}
 	}

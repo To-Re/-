@@ -29,3 +29,14 @@ func CreateStudent(user *model.Student) error {
 	}
 	return nil
 }
+
+func UpdateStudent(user *model.Student) error {
+	db := dal.db
+	if err := db.Table(dal.studentTableName).
+		Where("id = ?", user.ID).
+		Select("name", "password", "klass_id").
+		Updates(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
