@@ -14,6 +14,7 @@ type Dal struct {
 	paperTableName         string
 	paperQuestionTableName string
 	examTableName          string
+	klassExamTableName     string
 }
 
 var dal *Dal
@@ -30,6 +31,7 @@ func NewDal(gormDb *gorm.DB) {
 			paperTableName:         "paper",
 			paperQuestionTableName: "paper_question",
 			examTableName:          "exam",
+			klassExamTableName:     "klass_exam",
 		}
 	}
 }
