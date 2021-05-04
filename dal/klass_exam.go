@@ -1,6 +1,8 @@
 package dal
 
-import "bishe/backend/model"
+import (
+	"bishe/backend/model"
+)
 
 func GetExamKlassListByKlassId(exam_id int32) ([]*model.KlassExam, error) {
 	db := dal.db
@@ -9,4 +11,12 @@ func GetExamKlassListByKlassId(exam_id int32) ([]*model.KlassExam, error) {
 		return nil, err
 	}
 	return list, nil
+}
+
+func CreateKlassExam(klassExam *model.KlassExam) error {
+	db := dal.db
+	if err := db.Table(dal.klassExamTableName).Create(klassExam).Error; err != nil {
+		return err
+	}
+	return nil
 }

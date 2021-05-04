@@ -3,6 +3,9 @@ package pack
 import (
 	"bishe/backend/dal"
 	"bishe/backend/model"
+	"fmt"
+
+	"gorm.io/gorm"
 )
 
 func ExamKlassList(examId int32) ([]*model.Klass, error) {
@@ -16,4 +19,15 @@ func ExamKlassList(examId int32) ([]*model.Klass, error) {
 	}
 
 	return dal.GetExamListByIds(klassIds)
+}
+
+func ExamKlassBind(req *model.KlassExam) error {
+	_, err := dal.GetKlassById(int32(req.KlassID))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return fmt.Errorf("班级id 不存在")
+		}
+		return err
+	}
+	return dal.CreateKlassExam(req)
 }

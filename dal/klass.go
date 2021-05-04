@@ -25,7 +25,7 @@ func CreateKlass(tx *gorm.DB, klass *model.Klass) error {
 func GetKlassById(klass_id int32) (*model.Klass, error) {
 	db := dal.db
 	klass := &model.Klass{}
-	if err := db.Table(dal.klassTableName).Where("id = ?", klass_id).Find(&klass).Error; err != nil {
+	if err := db.Table(dal.klassTableName).Where("id = ?", klass_id).First(&klass).Error; err != nil {
 		return nil, err
 	}
 	return klass, nil
