@@ -32,10 +32,11 @@ func CreateStudent(user *model.Student) error {
 
 func UpdateStudent(user *model.Student) error {
 	db := dal.db
-	if err := db.Table(dal.studentTableName).
-		Where("id = ?", user.ID).
-		Select("name", "password", "klass_id").
-		Updates(user).Error; err != nil {
+	db = db.Table(dal.studentTableName).Where("id = ?", user.ID).Select("name", "klass_id")
+	if user.Password != "" {
+		db = db.Select("password")
+	}
+	if err := db.Updates(user).Error; err != nil {
 		return err
 	}
 	return nil
