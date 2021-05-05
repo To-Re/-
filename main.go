@@ -101,6 +101,7 @@ func main() {
 				student.POST("/info/update", studentMethod.StudentInfoUpdate)
 				student.GET("/exam/list", studentMethod.GetStudentExamList)
 				student.GET("/exam/detail", studentMethod.StudentExamDetail)
+				student.POST("/exam/commit", studentMethod.StudentExamCommit)
 			}
 		}
 	}
