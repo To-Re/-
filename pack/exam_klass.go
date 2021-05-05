@@ -18,7 +18,7 @@ func ExamKlassList(examId int32) ([]*model.Klass, error) {
 		klassIds = append(klassIds, int32(v.KlassID))
 	}
 
-	return dal.GetExamListByIds(klassIds)
+	return dal.GetKlassListByIds(klassIds)
 }
 
 func ExamKlassBind(req *model.KlassExam) error {

@@ -41,7 +41,7 @@ func UpdateKlass(klass *model.Klass) error {
 	return nil
 }
 
-func GetExamListByIds(ids []int32) ([]*model.Klass, error) {
+func GetKlassListByIds(ids []int32) ([]*model.Klass, error) {
 	db := dal.db
 	klassList := []*model.Klass{}
 	if err := db.Table(dal.klassTableName).Where("id in (?)", ids).Find(&klassList).Error; err != nil {
