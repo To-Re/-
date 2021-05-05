@@ -41,3 +41,15 @@ func GetExamKlassListByKlassId(klass_id int32) ([]*model.KlassExam, error) {
 	}
 	return list, nil
 }
+
+func GetExamKlasstByExamIdKlassId(exam_id, klass_id int32) (*model.KlassExam, error) {
+	db := dal.db
+	klassExam := model.KlassExam{}
+	if err := db.Table(dal.klassExamTableName).
+		Where("klass_id = ?", klass_id).
+		Where("exam_id = ?", exam_id).
+		First(&klassExam).Error; err != nil {
+		return nil, err
+	}
+	return &klassExam, nil
+}

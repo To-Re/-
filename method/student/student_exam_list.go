@@ -31,7 +31,7 @@ func GetStudentExamList(c *gin.Context) {
 
 	info, err := pack.GetStudentExamList(userId)
 	if err != nil {
-		c.JSON(200, util.BuildError(util.FUNCFAILURE, "修改失败："+err.Error()))
+		c.JSON(200, util.BuildError(util.FUNCFAILURE, "查询失败："+err.Error()))
 		return
 	}
 
