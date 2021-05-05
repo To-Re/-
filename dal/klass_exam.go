@@ -32,3 +32,12 @@ func DeleteKlassExam(klassExam *model.KlassExam) error {
 	}
 	return nil
 }
+
+func GetExamKlassListByKlassId(klass_id int32) ([]*model.KlassExam, error) {
+	db := dal.db
+	list := []*model.KlassExam{}
+	if err := db.Table(dal.klassExamTableName).Where("klass_id = ?", klass_id).Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return list, nil
+}

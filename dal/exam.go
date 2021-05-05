@@ -37,3 +37,12 @@ func UpdateExam(exam *model.Exam) error {
 	}
 	return nil
 }
+
+func GetExamListByIds(ids []int32) ([]*model.Exam, error) {
+	db := dal.db
+	examList := []*model.Exam{}
+	if err := db.Table(dal.examTableName).Where("id in (?)", ids).Find(&examList).Error; err != nil {
+		return nil, err
+	}
+	return examList, nil
+}

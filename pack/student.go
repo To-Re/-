@@ -56,3 +56,57 @@ type StructInfoUpdate struct {
 	KlassId     int32
 	Password    string
 }
+
+func GetStudentExamList(userId int32) ([]*StudentExam, error) {
+	// 拿到班级id
+	student, err := dal.GetStudentByUserId(userId)
+	if err != nil {
+		return nil, err
+	}
+	examKlassList, err := dal.GetExamKlassListByKlassId(int32(student.KlassID))
+	if err != nil {
+		return nil, err
+	}
+	examIds := make([]int32, 0, len(examKlassList))
+	for _, v := range examKlassList {
+		examIds = append(examIds, int32(v.ExamID))
+	}
+	// 考试列表
+	examInfoList, err := dal.GetExamListByIds(examIds)
+	if err != nil {
+		return nil, err
+	}
+	// 得到成绩列表
+	scoreInfoList, err := dal.GetExamResultList(userId, examIds)
+	if err != nil {
+		return nil, err
+	}
+	scoreMap := make(map[int32]int32)
+	for _, v := range scoreInfoList {
+		scoreMap[int32(v.ExamID)] = int32(v.Score)
+	}
+
+	resList := make([]*StudentExam, 0, len(examInfoList))
+	for _, v := range examInfoList {
+		tmp := StudentExam{
+			ExamId:        int32(v.ID),
+			ExamName:      v.Name,
+			ExamBeginTime: v.BeginTime.Unix(),
+			ExamEndTime:   v.EndTime.Unix(),
+		}
+		if score, ok := scoreMap[int32(v.ID)]; ok {
+			tmp.ExamStudentScore = &score
+		}
+
+		resList = append(resList, &tmp)
+	}
+	return resList, nil
+}
+
+type StudentExam struct {
+	ExamId           int32
+	ExamName         string
+	ExamBeginTime    int64
+	ExamEndTime      int64
+	ExamStudentScore *int32
+}
