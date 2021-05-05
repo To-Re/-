@@ -9,7 +9,7 @@ import (
 )
 
 func ExamKlassList(examId int32) ([]*model.Klass, error) {
-	examKlassList, err := dal.GetExamKlassListByKlassId(examId)
+	examKlassList, err := dal.GetExamKlassListByExamId(examId)
 	if err != nil {
 		return nil, err
 	}
