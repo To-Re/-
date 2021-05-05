@@ -46,7 +46,7 @@ type StudentExamDetailRequest struct {
 }
 
 type StudentExamDetailResponse struct {
-	ExamName    string           `json:"question_desc"`
+	ExamName    string           `json:"exam_name"`
 	ScoreLimit  int32            `json:"score_limit"`
 	ExamEndTime int64            `json:"exam_end_time"`
 	Questions   []*pack.Question `json:"questions"`
