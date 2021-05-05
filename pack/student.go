@@ -160,6 +160,7 @@ func GetStudentExamDetail(userId, ExamId int32) (*StudentExamDetail, error) {
 	resQuestions := make([]*Question, 0, len(questionIds))
 	for _, v := range questionInfo {
 		resQuestions = append(resQuestions, &Question{
+			QuestionId:    int32(v.ID),
 			QuestionDesc:  v.Desc,
 			QuestionType:  util.QuestionTypeMap[int32(v.Type)],
 			QuestionScore: questionScoreMap[int32(v.ID)],
@@ -187,6 +188,7 @@ type StudentExamDetail struct {
 }
 
 type Question struct {
+	QuestionId    int32  `json:"question_id"`
 	QuestionDesc  string `json:"question_desc"`
 	QuestionScore int32  `json:"question_score"`
 	QuestionType  string `json:"question_type"`
@@ -194,4 +196,5 @@ type Question struct {
 	OptionDescB   string `json:"option_desc_b"`
 	OptionDescC   string `json:"option_desc_c"`
 	OptionDescD   string `json:"option_desc_d"`
+	StudentAnswer string `json:"student_answer"`
 }
