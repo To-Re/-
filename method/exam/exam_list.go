@@ -23,7 +23,7 @@ func ExamList(c *gin.Context) {
 		return
 	}
 
-	Exams, err := dal.GetExamList()
+	Exams, err := dal.GetExamList(0)
 	if err != nil {
 		c.JSON(200, util.BuildError(util.FUNCFAILURE, "查询题目列表失败："+err.Error()))
 		return
