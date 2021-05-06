@@ -41,3 +41,12 @@ func UpdateStudent(user *model.Student) error {
 	}
 	return nil
 }
+
+func GetStudentByKlassId(klass_id int32) ([]*model.Student, error) {
+	db := dal.db
+	list := []*model.Student{}
+	if err := db.Table(dal.studentTableName).Where("klass_id = ?", klass_id).Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return list, nil
+}

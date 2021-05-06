@@ -36,3 +36,15 @@ func GetExamResult(req *model.ExamResult) (*model.ExamResult, error) {
 	}
 	return res, nil
 }
+
+func GetExamResultByStudentIdsExamId(studentIds []int32, exam_id int32) ([]*model.ExamResult, error) {
+	db := dal.db
+	examResultList := []*model.ExamResult{}
+	if err := db.Table(dal.examResultTableName).
+		Where("student_id in (?)", studentIds).
+		Where("exam_id = (?)", exam_id).
+		Find(&examResultList).Error; err != nil {
+		return nil, err
+	}
+	return examResultList, nil
+}

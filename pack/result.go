@@ -59,3 +59,51 @@ type Result struct {
 	KlassId       int32  `json:"klass_id"`
 	KlassName     string `json:"klass_name"`
 }
+
+func StudentResultList(exam_id, klass_id int32) ([]*StudentResult, error) {
+	// 获取学生info list
+	studentInfo, err := dal.GetStudentByKlassId(klass_id)
+	if err != nil {
+		return nil, err
+	}
+	studentIds := make([]int32, 0, len(studentInfo))
+	studentMap := make(map[int32]*model.Student)
+	for _, v := range studentInfo {
+		studentIds = append(studentIds, int32(v.ID))
+		studentMap[int32(v.ID)] = v
+	}
+	// exam_result 获取分数和考试状态
+	// 最好在限制 paper_id 懒得弄了
+	examResultInfo, err := dal.GetExamResultByStudentIdsExamId(studentIds, exam_id)
+	if err != nil {
+		return nil, err
+	}
+	examResultMap := make(map[int32]*model.ExamResult)
+	for _, v := range examResultInfo {
+		examResultMap[int32(v.StudentID)] = v
+	}
+
+	resp := make([]*StudentResult, 0, len(studentIds))
+	for _, v := range studentIds {
+		tmp := &StudentResult{
+			StudentId:   v,
+			StudentName: studentMap[v].Name,
+		}
+
+		if e, ok := examResultMap[v]; ok {
+			tmp.StudentResultStatus = "已交卷"
+			tmp.StudentScore = int32(e.Score)
+		} else {
+			tmp.StudentResultStatus = "未考试"
+		}
+		resp = append(resp, tmp)
+	}
+	return resp, nil
+}
+
+type StudentResult struct {
+	StudentId           int32  `json:"student_id"`
+	StudentName         string `json:"student_name"`
+	StudentResultStatus string `json:"student_result_status"`
+	StudentScore        int32  `json:"student_score"`
+}

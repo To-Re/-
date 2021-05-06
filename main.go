@@ -94,6 +94,7 @@ func main() {
 			result := teacher.Group("result")
 			{
 				result.GET("/list", resultMethod.GetResultList)
+				result.GET("/detail", resultMethod.StudentResultList)
 
 			}
 		}
