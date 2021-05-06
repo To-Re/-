@@ -34,6 +34,7 @@ func StudentExamDetail(c *gin.Context) {
 		return
 	}
 
+	resp.StudentScore = info.StudentScore
 	resp.ExamName = info.ExamName
 	resp.ScoreLimit = info.ScoreLimit
 	resp.ExamEndTime = info.ExamEndTime
@@ -46,10 +47,11 @@ type StudentExamDetailRequest struct {
 }
 
 type StudentExamDetailResponse struct {
-	ExamName    string           `json:"exam_name"`
-	ScoreLimit  int32            `json:"score_limit"`
-	ExamEndTime int64            `json:"exam_end_time"`
-	Questions   []*pack.Question `json:"questions"`
+	ExamName     string           `json:"exam_name"`
+	ScoreLimit   int32            `json:"score_limit"`
+	ExamEndTime  int64            `json:"exam_end_time"`
+	StudentScore *int32           `json:"student_score,omitempty"`
+	Questions    []*pack.Question `json:"questions"`
 
 	Code int32  `json:"code"`
 	Msg  string `json:"msg"`

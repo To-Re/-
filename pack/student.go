@@ -170,33 +170,64 @@ func GetStudentExamDetail(userId, ExamId int32) (*StudentExamDetail, error) {
 			OptionDescD:   v.OptionDescD,
 		})
 	}
-
 	// 组装返回
-	return &StudentExamDetail{
-		ExamName:    examInfo.Name,
-		ExamEndTime: examInfo.EndTime.Unix(),
-		ScoreLimit:  int32(paperInfo.ScoreLimit),
-		Questions:   resQuestions,
-	}, nil
+	resp := &StudentExamDetail{
+		ExamName:     examInfo.Name,
+		ExamEndTime:  examInfo.EndTime.Unix(),
+		ScoreLimit:   int32(paperInfo.ScoreLimit),
+		StudentScore: nil,
+		Questions:    resQuestions,
+	}
+
+	// 尝试获取考试结果
+	examResutlInfo, err := dal.GetExamResult(&model.ExamResult{
+		StudentID: int(userId),
+		ExamID:    int(ExamId),
+	})
+	if err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, err
+		}
+		// 没有考试记录
+		return resp, nil
+	}
+	// 有考试记录，尝试获取作答结果
+	records, err := dal.GetRecordList(&model.Record{
+		ExamID:    int(ExamId),
+		StudentID: int(userId),
+		PaperID:   paperInfo.ID,
+	})
+	recordMap := make(map[int32]*model.Record)
+	for _, v := range records {
+		recordMap[int32(v.QuestionID)] = v
+	}
+	resp.StudentScore = util.ConvertInt32ToPtr(int32(examResutlInfo.Score))
+	for _, v := range resp.Questions {
+		v.QuestionStudentScore = util.ConvertInt32ToPtr(int32(recordMap[v.QuestionId].Score))
+		v.StudentAnswer = recordMap[v.QuestionId].Desc
+	}
+	return resp, nil
 }
 
 type StudentExamDetail struct {
-	ExamName    string      `json:"question_desc"`
-	ScoreLimit  int32       `json:"score_limit"`
-	ExamEndTime int64       `json:"exam_end_time"`
-	Questions   []*Question `json:"questions"`
+	ExamName     string      `json:"exam_name"`
+	ScoreLimit   int32       `json:"score_limit"`
+	ExamEndTime  int64       `json:"exam_end_time"`
+	StudentScore *int32      `json:"student_score,omitempty"`
+	Questions    []*Question `json:"questions"`
 }
 
 type Question struct {
-	QuestionId    int32  `json:"question_id"`
-	QuestionDesc  string `json:"question_desc"`
-	QuestionScore int32  `json:"question_score"`
-	QuestionType  string `json:"question_type"`
-	OptionDescA   string `json:"option_desc_a"`
-	OptionDescB   string `json:"option_desc_b"`
-	OptionDescC   string `json:"option_desc_c"`
-	OptionDescD   string `json:"option_desc_d"`
-	StudentAnswer string `json:"student_answer"`
+	QuestionId           int32  `json:"question_id"`
+	QuestionDesc         string `json:"question_desc"`
+	QuestionScore        int32  `json:"question_score"`
+	QuestionType         string `json:"question_type"`
+	OptionDescA          string `json:"option_desc_a"`
+	OptionDescB          string `json:"option_desc_b"`
+	OptionDescC          string `json:"option_desc_c"`
+	OptionDescD          string `json:"option_desc_d"`
+	StudentAnswer        string `json:"student_answer"`
+	QuestionStudentScore *int32 `json:"question_student_score,omitempty"`
 }
 
 func StudentExamCommit(userId, ExamId int32, studentAnswer []*StudentQeustionAnswer) error {
