@@ -198,3 +198,115 @@ type Question struct {
 	OptionDescD   string `json:"option_desc_d"`
 	StudentAnswer string `json:"student_answer"`
 }
+
+func StudentExamCommit(userId, ExamId int32, studentAnswer []*StudentQeustionAnswer) error {
+	examInfo, err := dal.GetExamById(ExamId)
+	if err != nil {
+		return err
+	}
+	// 校验考试时间
+	if examInfo.BeginTime.Unix() > time.Now().Unix() {
+		return fmt.Errorf("考试未开始")
+	}
+	if examInfo.EndTime.Unix() < time.Now().Unix() {
+		return fmt.Errorf("考试结束")
+	}
+	// 校验考试资格
+	studentInfo, err := dal.GetStudentByUserId(userId)
+	if err != nil {
+		return err
+	}
+	_, err = dal.GetExamKlasstByExamIdKlassId(ExamId, int32(studentInfo.KlassID))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return fmt.Errorf("没有考试资格")
+		}
+		return err
+	}
+	// 是否已交卷
+	_, err = dal.GetExamResult(&model.ExamResult{
+		StudentID: int(userId),
+		ExamID:    int(ExamId),
+	})
+	if err == nil {
+		return fmt.Errorf("已交卷")
+	}
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return err
+	}
+
+	// 获取考卷信息
+	paperInfo, err := dal.GetPaperById(int32(examInfo.PaperID))
+	if err != nil {
+		return err
+	}
+	// 获取考题ids
+	questions, err := dal.GetPaperQuestionListByPaperId(int32(paperInfo.ID))
+	if err != nil {
+		return err
+	}
+	questionIds := make([]int32, 0, len(questions))
+	questionScoreMap := make(map[int32]int32)
+	for _, v := range questions {
+		questionIds = append(questionIds, int32(v.QuestionID))
+		questionScoreMap[int32(v.QuestionID)] = int32(v.QuestionScore)
+	}
+	// 获取考题信息
+	questionInfo, err := dal.GetQuestionListByIds(questionIds)
+	if err != nil {
+		return err
+	}
+	// 组装考题map
+	answerMap := make(map[int32]*model.Question)
+	for _, v := range questionInfo {
+		answerMap[int32(v.ID)] = v
+	}
+	// 开启事物
+	tx := dal.GetDb().Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
+	// 总分
+	var sumScore int32 = 0
+	// 写入作答记录
+	records := make([]model.Record, 0, len(studentAnswer))
+	for _, v := range studentAnswer {
+		var lastScore int32 = 0
+		if v.Answer == answerMap[v.QuesitonId].Answer {
+			lastScore = questionScoreMap[v.QuesitonId]
+		}
+		sumScore += lastScore
+		records = append(records, model.Record{
+			StudentID:  int(userId),
+			ExamID:     int(ExamId),
+			PaperID:    paperInfo.ID,
+			QuestionID: int(v.QuesitonId),
+			Desc:       v.Answer,
+			Score:      int(lastScore),
+		})
+	}
+	if err := dal.CreateRecord(tx, &records); err != nil {
+		tx.Rollback()
+		return err
+	}
+	// 写入考试结果
+	if err := dal.CreateExamResult(tx, &model.ExamResult{
+		ExamID:    int(ExamId),
+		StudentID: int(userId),
+		Score:     int(sumScore),
+	}); err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
+
+type StudentQeustionAnswer struct {
+	QuesitonId int32  `json:"question_id"`
+	Answer     string `json:"answer"`
+}

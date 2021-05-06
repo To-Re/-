@@ -1,6 +1,10 @@
 package dal
 
-import "bishe/backend/model"
+import (
+	"bishe/backend/model"
+
+	"gorm.io/gorm"
+)
 
 func GetExamResultList(userId int32, ids []int32) ([]*model.ExamResult, error) {
 	db := dal.db
@@ -12,4 +16,23 @@ func GetExamResultList(userId int32, ids []int32) ([]*model.ExamResult, error) {
 		return nil, err
 	}
 	return examResultList, nil
+}
+
+func CreateExamResult(tx *gorm.DB, examResult *model.ExamResult) error {
+	if err := tx.Table(dal.examResultTableName).Create(examResult).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetExamResult(req *model.ExamResult) (*model.ExamResult, error) {
+	db := dal.db
+	res := &model.ExamResult{}
+	if err := db.Table(dal.examResultTableName).
+		Where("exam_id = ?", req.ExamID).
+		Where("student_id = ?", req.StudentID).
+		First(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
 }
