@@ -7,6 +7,7 @@ import (
 	klassMethod "bishe/backend/method/klass"
 	paperMethod "bishe/backend/method/paper"
 	questionMethod "bishe/backend/method/question"
+	resultMethod "bishe/backend/method/result"
 	studentMethod "bishe/backend/method/student"
 	userMethod "bishe/backend/method/user"
 	"bishe/backend/util"
@@ -89,6 +90,11 @@ func main() {
 				exam.GET("/klass/list", examMethod.ExamKlassList)
 				exam.POST("/klass/bind", examMethod.ExamKlassBind)
 				exam.POST("/klass/delete", examMethod.ExamKlassDelete)
+			}
+			result := teacher.Group("result")
+			{
+				result.GET("/list", resultMethod.GetResultList)
+
 			}
 		}
 

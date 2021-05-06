@@ -1,13 +1,16 @@
 package dal
 
-import "bishe/backend/model"
+import (
+	"bishe/backend/model"
+	"time"
+)
 
 func GetExamList(endTime int64) ([]*model.Exam, error) {
 	db := dal.db
 	list := []*model.Exam{}
 	db = db.Table(dal.examTableName)
 	if endTime > 0 {
-		db = db.Where("end_time < ?", endTime)
+		db = db.Where("end_time < ?", time.Unix(endTime, 0))
 	}
 	if err := db.Find(&list).Error; err != nil {
 		return nil, err
