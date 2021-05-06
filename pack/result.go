@@ -3,7 +3,11 @@ package pack
 import (
 	"bishe/backend/dal"
 	"bishe/backend/model"
+	"bishe/backend/util"
+	"fmt"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func GetResultList() ([]*Result, error) {
@@ -106,4 +110,89 @@ type StudentResult struct {
 	StudentName         string `json:"student_name"`
 	StudentResultStatus string `json:"student_result_status"`
 	StudentScore        int32  `json:"student_score"`
+}
+
+// 老师查考卷，直接cv，懒得动代码了
+func GetStudentResultPaperDetail(userId, ExamId int32) (*StudentExamDetail, error) {
+	examInfo, err := dal.GetExamById(ExamId)
+	if err != nil {
+		return nil, err
+	}
+	// 校验是否开始考试
+	if examInfo.BeginTime.Unix() > time.Now().Unix() {
+		return nil, fmt.Errorf("考试未开始")
+	}
+	// 获取考卷信息
+	paperInfo, err := dal.GetPaperById(int32(examInfo.PaperID))
+	if err != nil {
+		return nil, err
+	}
+	// 获取考题ids
+	questions, err := dal.GetPaperQuestionListByPaperId(int32(paperInfo.ID))
+	if err != nil {
+		return nil, err
+	}
+	questionIds := make([]int32, 0, len(questions))
+	questionScoreMap := make(map[int32]int32)
+	for _, v := range questions {
+		questionIds = append(questionIds, int32(v.QuestionID))
+		questionScoreMap[int32(v.QuestionID)] = int32(v.QuestionScore)
+	}
+
+	// 获取考题信息
+	questionInfo, err := dal.GetQuestionListByIds(questionIds)
+	if err != nil {
+		return nil, err
+	}
+
+	resQuestions := make([]*Question, 0, len(questionIds))
+	for _, v := range questionInfo {
+		resQuestions = append(resQuestions, &Question{
+			QuestionId:    int32(v.ID),
+			QuestionDesc:  v.Desc,
+			QuestionType:  util.QuestionTypeMap[int32(v.Type)],
+			QuestionScore: questionScoreMap[int32(v.ID)],
+			OptionDescA:   v.OptionDescA,
+			OptionDescB:   v.OptionDescB,
+			OptionDescC:   v.OptionDescC,
+			OptionDescD:   v.OptionDescD,
+		})
+	}
+	// 组装返回
+	resp := &StudentExamDetail{
+		ExamName:     examInfo.Name,
+		ExamEndTime:  examInfo.EndTime.Unix(),
+		ScoreLimit:   int32(paperInfo.ScoreLimit),
+		StudentScore: nil,
+		Questions:    resQuestions,
+	}
+
+	// 尝试获取考试结果
+	examResutlInfo, err := dal.GetExamResult(&model.ExamResult{
+		StudentID: int(userId),
+		ExamID:    int(ExamId),
+	})
+	if err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, err
+		}
+		// 没有考试记录
+		return resp, nil
+	}
+	// 有考试记录，尝试获取作答结果
+	records, err := dal.GetRecordList(&model.Record{
+		ExamID:    int(ExamId),
+		StudentID: int(userId),
+		PaperID:   paperInfo.ID,
+	})
+	recordMap := make(map[int32]*model.Record)
+	for _, v := range records {
+		recordMap[int32(v.QuestionID)] = v
+	}
+	resp.StudentScore = util.ConvertInt32ToPtr(int32(examResutlInfo.Score))
+	for _, v := range resp.Questions {
+		v.QuestionStudentScore = util.ConvertInt32ToPtr(int32(recordMap[v.QuestionId].Score))
+		v.StudentAnswer = recordMap[v.QuestionId].Desc
+	}
+	return resp, nil
 }

@@ -95,7 +95,7 @@ func main() {
 			{
 				result.GET("/list", resultMethod.GetResultList)
 				result.GET("/detail", resultMethod.StudentResultList)
-
+				result.GET("/paper/detail", resultMethod.GetStudentResultPaperDetail)
 			}
 		}
 
