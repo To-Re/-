@@ -20,7 +20,7 @@ func GetWho(c *gin.Context) (int32, error) {
 	return 0, fmt.Errorf("未登录")
 }
 
-// 中间件
+// 登录中间件
 func AccessTokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authtoken := c.Request.Header.Get("AuthToken")
@@ -42,7 +42,7 @@ func AccessTokenMiddleware() gin.HandlerFunc {
 	}
 }
 
-// 中间件
+// 老师角色鉴权中间件
 func CheckTeacherAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userType, err := GetWho(c)

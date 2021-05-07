@@ -191,8 +191,11 @@ func GetStudentResultPaperDetail(userId, ExamId int32) (*StudentExamDetail, erro
 	}
 	resp.StudentScore = util.ConvertInt32ToPtr(int32(examResutlInfo.Score))
 	for _, v := range resp.Questions {
-		v.QuestionStudentScore = util.ConvertInt32ToPtr(int32(recordMap[v.QuestionId].Score))
-		v.StudentAnswer = recordMap[v.QuestionId].Desc
+		record, ok := recordMap[v.QuestionId]
+		if ok {
+			v.QuestionStudentScore = util.ConvertInt32ToPtr(int32(record.Score))
+			v.StudentAnswer = recordMap[v.QuestionId].Desc
+		}
 	}
 	return resp, nil
 }
