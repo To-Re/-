@@ -47,11 +47,11 @@ type StudentInfoRequest struct {
 }
 
 type StudentInfoResponse struct {
-	StudentId     int32  `json:"student_id"`
-	StudentName   string `json:"student_name"`
-	StudentNumber string `json:"student_number"`
-	KlassId       int32  `json:"klass_id"`
-	KlassName     string `json:"klass_name"`
+	StudentId     int32   `json:"student_id"`
+	StudentName   string  `json:"student_name"`
+	StudentNumber string  `json:"student_number"`
+	KlassId       *int32  `json:"klass_id,omitempty"`
+	KlassName     *string `json:"klass_name,omitempty"`
 
 	Code int32  `json:"code"`
 	Msg  string `json:"msg"`

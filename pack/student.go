@@ -15,25 +15,29 @@ func GetStudentInfoById(student_id int32) (*StructInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	klass, err := dal.GetKlassById(int32(student.KlassID))
-	if err != nil {
-		return nil, err
-	}
-	return &StructInfo{
+	resp := StructInfo{
 		StudentId:     int32(student.ID),
 		StudentName:   student.Name,
 		StudentNumber: student.Number,
-		KlassId:       int32(student.KlassID),
-		KlassName:     klass.Name,
-	}, nil
+	}
+	klass, err := dal.GetKlassById(int32(student.KlassID))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return &resp, nil
+		}
+		return nil, err
+	}
+	resp.KlassId = util.ConvertInt32ToPtr(int32(student.KlassID))
+	resp.KlassName = &klass.Name
+	return &resp, nil
 }
 
 type StructInfo struct {
 	StudentId     int32
 	StudentName   string
 	StudentNumber string
-	KlassId       int32
-	KlassName     string
+	KlassId       *int32
+	KlassName     *string
 }
 
 func UpdateStudentInfo(req *StructInfoUpdate) error {
